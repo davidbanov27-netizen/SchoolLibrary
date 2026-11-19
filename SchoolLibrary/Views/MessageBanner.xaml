@@ -1,0 +1,35 @@
+<UserControl x:Class="SchoolLibrary.Views.MessageBanner"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Показва Message и Kind от ViewModel-а на екрана. Скрит е, когато Kind = None. -->
+    <Border Padding="12,9" Margin="0,4,0,10" CornerRadius="4" BorderThickness="1">
+        <Border.Style>
+            <Style TargetType="Border">
+                <Setter Property="Visibility" Value="Collapsed"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Kind}" Value="Success">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Setter Property="Background" Value="{StaticResource OkBg}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource OkBorder}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="Error">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Setter Property="Background" Value="{StaticResource ErrBg}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource ErrBorder}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="Warning">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Setter Property="Background" Value="{StaticResource WarnBg}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource WarnBorder}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="Info">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Setter Property="Background" Value="{StaticResource InfoBg}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource InfoBorder}"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
+        <TextBlock Text="{Binding Message}" TextWrapping="Wrap" Foreground="{StaticResource TextBrush}"/>
+    </Border>
+</UserControl>

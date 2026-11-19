@@ -1,0 +1,56 @@
+<UserControl x:Class="SchoolLibrary.Views.RecsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:SchoolLibrary.Views">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24,20">
+            <TextBlock Text="Препоръки за теб" Style="{StaticResource PageTitle}"/>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="Моите интереси" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                    <ItemsControl ItemsSource="{Binding Interests}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <local:MessageBanner/>
+
+            <DataGrid ItemsSource="{Binding Items}" Visibility="{Binding HasItems, Converter={StaticResource BoolToVis}}">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Книга" Width="3*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,4">
+                                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                                    <TextBlock Text="{Binding Subtitle}" Style="{StaticResource MutedText}"/>
+                                    <TextBlock Text="{Binding WhyText}" Foreground="{StaticResource AccentBrush}" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Наличност" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,4">
+                                    <TextBlock Text="{Binding AvailabilityText}" Style="{StaticResource AvailabilityText}"/>
+                                    <TextBlock Text="{Binding Shelf}" Style="{StaticResource MutedText}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,41 @@
+<UserControl x:Class="SchoolLibrary.Views.StatsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <!-- Един шаблон за хоризонтална колонна диаграма: етикет, лента, число -->
+        <DataTemplate x:Key="BarTemplate">
+            <StackPanel Orientation="Horizontal" Margin="0,5">
+                <TextBlock Text="{Binding Label}" Width="250" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                <Border Width="{Binding BarWidth}" Height="16" CornerRadius="3" Background="#93C5FD" MinWidth="2"/>
+                <TextBlock Text="{Binding Value}" FontWeight="SemiBold" Margin="10,0,0,0" VerticalAlignment="Center"/>
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24,20">
+            <TextBlock Text="Статистика" Style="{StaticResource PageTitle}"/>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="Най-заеманите книги" Style="{StaticResource SectionTitle}" Margin="0,0,0,6"/>
+                    <ItemsControl ItemsSource="{Binding TopBooks}" ItemTemplate="{StaticResource BarTemplate}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="Заемания по месеци" Style="{StaticResource SectionTitle}" Margin="0,0,0,6"/>
+                    <ItemsControl ItemsSource="{Binding ByMonth}" ItemTemplate="{StaticResource BarTemplate}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <TextBlock>
+                    <Run Text="Просрочени сега: " FontWeight="SemiBold"/>
+                    <Run Text="{Binding OverdueNow, Mode=OneWay}"/>
+                </TextBlock>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

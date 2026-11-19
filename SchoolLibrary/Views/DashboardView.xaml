@@ -1,0 +1,59 @@
+<UserControl x:Class="SchoolLibrary.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24,20">
+            <TextBlock Text="Табло" Style="{StaticResource PageTitle}"/>
+
+            <UniformGrid Rows="1" Columns="3">
+                <Border Style="{StaticResource Card}" Margin="0,0,12,14">
+                    <StackPanel>
+                        <TextBlock Text="{Binding TotalCopies}" FontSize="28" FontWeight="SemiBold"/>
+                        <TextBlock Text="екземпляра в каталога" Style="{StaticResource MutedText}"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Card}" Margin="0,0,12,14">
+                    <StackPanel>
+                        <TextBlock Text="{Binding ActiveLoans}" FontSize="28" FontWeight="SemiBold"/>
+                        <TextBlock Text="активни заемания" Style="{StaticResource MutedText}"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Card}" Margin="0,0,0,14">
+                    <StackPanel>
+                        <TextBlock Text="{Binding OverdueCount}" FontSize="28" FontWeight="SemiBold">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{StaticResource OkBrush}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding HasOverdue}" Value="True">
+                                            <Setter Property="Foreground" Value="{StaticResource ErrBrush}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock Text="просрочени книги" Style="{StaticResource MutedText}"/>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <TextBlock Text="Бързи действия" Style="{StaticResource SectionTitle}" Margin="0,4,0,8"/>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Заемане" Style="{StaticResource PrimaryButton}" Command="{Binding LoanCommand}"/>
+                <Button Content="Връщане" Style="{StaticResource PrimaryButton}" Command="{Binding ReturnCommand}"/>
+                <Button Content="Каталог" Command="{Binding CatalogCommand}"/>
+            </StackPanel>
+
+            <TextBlock Text="Напомняния за днес" Style="{StaticResource SectionTitle}"/>
+            <Border Style="{StaticResource Card}">
+                <ItemsControl ItemsSource="{Binding Reminders}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" Margin="0,2" TextWrapping="Wrap"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

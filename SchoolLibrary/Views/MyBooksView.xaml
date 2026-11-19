@@ -1,0 +1,29 @@
+<UserControl x:Class="SchoolLibrary.Views.MyBooksView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24,20">
+            <TextBlock Text="Моите книги" Style="{StaticResource PageTitle}"/>
+
+            <DataGrid ItemsSource="{Binding Rows}" Visibility="{Binding HasRows, Converter={StaticResource BoolToVis}}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Книга" Binding="{Binding BookTitle}" Width="2*" ElementStyle="{StaticResource CellText}"/>
+                    <DataGridTextColumn Header="Срок" Binding="{Binding DueDate, StringFormat=dd.MM.yyyy}" Width="110" ElementStyle="{StaticResource CellText}"/>
+                    <DataGridTemplateColumn Header="Статус" Width="2*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding StatusText}" Style="{StaticResource LoanStatusText}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Border Background="{StaticResource InfoBg}" BorderBrush="{StaticResource InfoBorder}"
+                    BorderThickness="1" CornerRadius="4" Padding="12,9"
+                    Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVis}}">
+                <TextBlock Text="Нямате заети книги." Foreground="{StaticResource InfoBrush}"/>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

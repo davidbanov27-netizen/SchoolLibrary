@@ -1,0 +1,31 @@
+<UserControl x:Class="SchoolLibrary.Views.OverdueView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24,20">
+            <TextBlock Text="Просрочени книги" Style="{StaticResource PageTitle}"/>
+
+            <DataGrid ItemsSource="{Binding Rows}" Visibility="{Binding HasRows, Converter={StaticResource BoolToVis}}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Читател" Binding="{Binding ReaderName}" Width="*" ElementStyle="{StaticResource CellText}"/>
+                    <DataGridTextColumn Header="Клас" Binding="{Binding ClassName}" Width="80" ElementStyle="{StaticResource CellText}"/>
+                    <DataGridTextColumn Header="Книга" Binding="{Binding BookTitle}" Width="2*" ElementStyle="{StaticResource CellText}"/>
+                    <DataGridTextColumn Header="Срок" Binding="{Binding DueDate, StringFormat=dd.MM.yyyy}" Width="110" ElementStyle="{StaticResource CellText}"/>
+                    <DataGridTemplateColumn Header="Просрочие" Width="2*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding StatusText}" Style="{StaticResource LoanStatusText}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Border Background="{StaticResource OkBg}" BorderBrush="{StaticResource OkBorder}"
+                    BorderThickness="1" CornerRadius="4" Padding="12,9"
+                    Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVis}}">
+                <TextBlock Text="Няма просрочени книги." Foreground="{StaticResource OkBrush}"/>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

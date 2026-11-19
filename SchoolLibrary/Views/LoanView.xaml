@@ -1,0 +1,64 @@
+<UserControl x:Class="SchoolLibrary.Views.LoanView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:SchoolLibrary.Views">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24,20">
+            <TextBlock Text="Заемане на книга" Style="{StaticResource PageTitle}"/>
+            <local:MessageBanner/>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="1. Читател" Style="{StaticResource FieldLabel}" Margin="0,0,0,4"/>
+                    <ComboBox ItemsSource="{Binding Readers}" SelectedItem="{Binding SelectedReader}"
+                              DisplayMemberPath="DisplayName"/>
+                    <Border Background="{StaticResource InfoBg}" BorderBrush="{StaticResource InfoBorder}"
+                            BorderThickness="1" CornerRadius="4" Padding="10,7" Margin="0,8,0,0"
+                            Visibility="{Binding HasReader, Converter={StaticResource BoolToVis}}">
+                        <TextBlock Text="{Binding ReaderInfo}" Foreground="{StaticResource InfoBrush}" TextWrapping="Wrap"/>
+                    </Border>
+
+                    <TextBlock Text="2. Книга" Style="{StaticResource FieldLabel}"/>
+                    <ComboBox ItemsSource="{Binding Books}" SelectedItem="{Binding SelectedBook}"
+                              DisplayMemberPath="Label"/>
+                    <Border Background="{StaticResource InfoBg}" BorderBrush="{StaticResource InfoBorder}"
+                            BorderThickness="1" CornerRadius="4" Padding="10,7" Margin="0,8,0,0"
+                            Visibility="{Binding HasBook, Converter={StaticResource BoolToVis}}">
+                        <TextBlock Text="{Binding BookInfo}" Foreground="{StaticResource InfoBrush}" TextWrapping="Wrap"/>
+                    </Border>
+
+                    <!-- Причини за отказ (алтернативни сценарии А2–А6 от UC-01) -->
+                    <Border Background="{StaticResource ErrBg}" BorderBrush="{StaticResource ErrBorder}"
+                            BorderThickness="1" CornerRadius="4" Padding="12,9" Margin="0,12,0,0"
+                            Visibility="{Binding HasProblems, Converter={StaticResource BoolToVis}}">
+                        <StackPanel>
+                            <TextBlock Text="Заемането не може да бъде потвърдено:" FontWeight="SemiBold"
+                                       Foreground="{StaticResource ErrBrush}"/>
+                            <ItemsControl ItemsSource="{Binding Problems}" Margin="0,4,0,0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding StringFormat='• {0}'}" TextWrapping="Wrap"
+                                                   Foreground="{StaticResource ErrBrush}" Margin="0,2"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <Button Content="Към „Връщане“" Command="{Binding GoReturnCommand}"
+                                    HorizontalAlignment="Left" Margin="0,10,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Background="{StaticResource OkBg}" BorderBrush="{StaticResource OkBorder}"
+                            BorderThickness="1" CornerRadius="4" Padding="12,9" Margin="0,12,0,0"
+                            Visibility="{Binding CanConfirm, Converter={StaticResource BoolToVis}}">
+                        <TextBlock Text="{Binding DueText}" Foreground="{StaticResource OkBrush}" TextWrapping="Wrap"/>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Отказ" Command="{Binding CancelCommand}"/>
+                <Button Content="Потвърди заемането" Style="{StaticResource PrimaryButton}" Command="{Binding ConfirmCommand}"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

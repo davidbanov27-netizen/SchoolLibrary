@@ -1,0 +1,109 @@
+<UserControl x:Class="SchoolLibrary.Views.CatalogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:SchoolLibrary.Views">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24,20">
+            <TextBlock Text="Каталог" Style="{StaticResource PageTitle}"/>
+            <local:MessageBanner/>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBox Width="320" Margin="0,0,10,0"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                         ToolTip="Търси по заглавие, автор, жанр или тема"/>
+                <Button Content="+ Нова книга" Style="{StaticResource PrimaryButton}" Command="{Binding AddCommand}"/>
+            </StackPanel>
+
+            <!-- Форма за нова книга (LB-01) -->
+            <Border Style="{StaticResource Card}" Margin="0,12,0,0"
+                    Visibility="{Binding IsAdding, Converter={StaticResource BoolToVis}}">
+                <StackPanel>
+                    <TextBlock Text="Нова книга" Style="{StaticResource SectionTitle}" Margin="0,0,0,4"/>
+                    <WrapPanel>
+                        <StackPanel Margin="0,0,16,0">
+                            <TextBlock Text="Заглавие *" Style="{StaticResource FieldLabel}"/>
+                            <TextBox Text="{Binding NewTitle, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,16,0">
+                            <TextBlock Text="Автор *" Style="{StaticResource FieldLabel}"/>
+                            <TextBox Text="{Binding NewAuthor, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,16,0">
+                            <TextBlock Text="Жанр" Style="{StaticResource FieldLabel}"/>
+                            <TextBox Text="{Binding NewGenre, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,16,0">
+                            <TextBlock Text="ISBN (по избор)" Style="{StaticResource FieldLabel}"/>
+                            <TextBox Text="{Binding NewIsbn, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,16,0">
+                            <TextBlock Text="Рафт" Style="{StaticResource FieldLabel}"/>
+                            <TextBox Text="{Binding NewShelf, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,16,0">
+                            <TextBlock Text="Брой копия" Style="{StaticResource FieldLabel}"/>
+                            <TextBox MinWidth="90" Width="90" Text="{Binding NewCopies, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,16,0">
+                            <TextBlock Text="От клас" Style="{StaticResource FieldLabel}"/>
+                            <TextBox MinWidth="90" Width="90" Text="{Binding NewMinGrade, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,16,0">
+                            <TextBlock Text="До клас" Style="{StaticResource FieldLabel}"/>
+                            <TextBox MinWidth="90" Width="90" Text="{Binding NewMaxGrade, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                    </WrapPanel>
+
+                    <TextBlock Text="Кратко описание" Style="{StaticResource FieldLabel}"/>
+                    <TextBox Text="{Binding NewDescription, UpdateSourceTrigger=PropertyChanged}"
+                             AcceptsReturn="True" TextWrapping="Wrap" MinHeight="54"/>
+
+                    <CheckBox Content="Само за четене в библиотеката (не се изнася)" Margin="0,12,0,0"
+                              IsChecked="{Binding NewReferenceOnly}"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                        <Button Content="Отказ" Command="{Binding CancelCommand}"/>
+                        <Button Content="Запази" Style="{StaticResource PrimaryButton}" Command="{Binding SaveCommand}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Text="Книги" Style="{StaticResource SectionTitle}"/>
+            <DataGrid ItemsSource="{Binding Books}" SelectedItem="{Binding SelectedBook}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Заглавие" Binding="{Binding Title}" Width="2*" ElementStyle="{StaticResource CellText}"/>
+                    <DataGridTextColumn Header="Автор" Binding="{Binding Author}" Width="1.5*" ElementStyle="{StaticResource CellText}"/>
+                    <DataGridTextColumn Header="Жанр" Binding="{Binding Genre}" Width="*" ElementStyle="{StaticResource CellText}"/>
+                    <DataGridTextColumn Header="Налични" Binding="{Binding Availability}" Width="90" ElementStyle="{StaticResource CellText}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <!-- Подробности за избраната книга (RD-04) -->
+            <Border Style="{StaticResource Card}" Margin="0,12,0,0"
+                    Visibility="{Binding HasSelection, Converter={StaticResource BoolToVis}}">
+                <StackPanel>
+                    <TextBlock Text="{Binding SelectedBook.Title}" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                    <TextBlock Margin="0,4,0,0" TextWrapping="Wrap">
+                        <Run Text="{Binding SelectedBook.Author, Mode=OneWay}"/>
+                        <Run Text=" · "/>
+                        <Run Text="{Binding SelectedBook.Genre, Mode=OneWay}"/>
+                        <Run Text=" · "/>
+                        <Run Text="{Binding SelectedBook.AgeText, Mode=OneWay}"/>
+                    </TextBlock>
+                    <TextBlock Text="{Binding SelectedBook.Description}" Margin="0,8,0,0" TextWrapping="Wrap"/>
+                    <TextBlock Style="{StaticResource MutedText}" Margin="0,8,0,0">
+                        <Run Text="Рафт: "/>
+                        <Run Text="{Binding SelectedBook.Shelf, Mode=OneWay}"/>
+                        <Run Text=" · Налични: "/>
+                        <Run Text="{Binding SelectedBook.Available, Mode=OneWay}"/>
+                        <Run Text=" от "/>
+                        <Run Text="{Binding SelectedBook.Total, Mode=OneWay}"/>
+                    </TextBlock>
+                    <Button Content="Премахни от каталога" Command="{Binding DeactivateCommand}"
+                            HorizontalAlignment="Left" Margin="0,12,0,0"
+                            Foreground="{StaticResource ErrBrush}"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
